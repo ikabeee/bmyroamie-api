@@ -21,6 +21,8 @@ $ npm run start:prod
 
 ## .env File
 
+This is an example to implement a .env file for out docker-compose and database connection
+
 ```
 POSTGRES_USER=myuser
 POSTGRES_PASSWORD=mypassword
