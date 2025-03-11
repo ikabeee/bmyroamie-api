@@ -12,3 +12,126 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id Int @id @default(autoincrement())
+  name String
+  lastName String
+  email String @unique
+  password String
+  telephone String
+  about_me String
+  status Int
+  role Int
+
+  UserPersonality UserPersonality[]
+  UserInterest UserInterest[]
+  Ad Ad[]
+  Favorite Favorite[]
+}
+
+model Personality {
+  id Int @id @default(autoincrement())
+  name String
+
+  UserPersonality UserPersonality[]
+}
+
+model UserPersonality {
+  id Int @id @default(autoincrement())
+  userId Int
+  personalityId Int
+  User User @relation(fields: [userId], references: [id])
+  Personality Personality @relation(fields: [personalityId], references: [id])
+}
+
+model Interest {
+  id Int @id @default(autoincrement())
+  name String
+
+  UserInterest UserInterest[]
+}
+
+model UserInterest {
+  id Int @id @default(autoincrement())
+  userId Int
+  interestId Int
+  User User @relation(fields: [userId], references: [id])
+  Interest Interest @relation(fields: [interestId], references: [id])
+}
+
+model Ad {
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  address String
+  price Float
+  num_rooms Int
+  num_bathrooms Int
+  lat Float
+  lon Float
+  status Int
+  created_at DateTime @default(now())
+  userId Int
+  stateId Int
+  User User @relation(fields: [userId], references: [id])
+  State State @relation(fields: [stateId], references: [id])
+
+  Favorite Favorite[]
+  AdAmenity AdAmenity[]
+  Image Image[]
+
+  Rule Rule[]
+}
+
+model State {
+  id Int @id @default(autoincrement())
+  name String
+
+  Ad Ad[]
+  Municipality Municipality[]
+}
+
+model Municipality {
+  id Int @id @default(autoincrement())
+  name String
+  stateId Int
+  State State @relation(fields: [stateId], references: [id])
+}
+
+model Favorite {
+  id Int @id @default(autoincrement())
+  userId Int
+  adId Int
+  User User @relation(fields: [userId], references: [id])
+  Ad Ad @relation(fields: [adId], references: [id])
+}
+
+model Rule {
+  id Int @id @default(autoincrement())
+  name String
+  adId Int
+  Ad Ad @relation(fields: [adId], references: [id])
+}
+
+model Amenity {
+  id Int @id @default(autoincrement())
+  name String
+
+  AdAmenity AdAmenity[]
+}
+
+model AdAmenity {
+  id Int @id @default(autoincrement())
+  adId Int
+  amenityId Int
+  Ad Ad @relation(fields: [adId], references: [id])
+  Amenity Amenity @relation(fields: [amenityId], references: [id])
+}
+
+model Image {
+  id Int @id @default(autoincrement())
+  url String
+  adId Int
+  Ad Ad @relation(fields: [adId], references: [id])
+}
