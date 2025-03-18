@@ -4,9 +4,10 @@ import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AdModule } from './ad/ad.module';
 import { PersonalityModule } from './personality/personality.module';
+import { InterestModule } from './interest/interest.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }), UserModule, PrismaModule, AdModule, PersonalityModule],
+  imports: [ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }), UserModule, PrismaModule, AdModule, PersonalityModule, InterestModule],
   controllers: [],
   providers: [],
 })
