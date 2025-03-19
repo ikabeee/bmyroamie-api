@@ -1,4 +1,12 @@
-import { Injectable, NotFoundException, BadRequestException, UnauthorizedException, ForbiddenException, ConflictException, UnprocessableEntityException, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+  ForbiddenException,
+  ConflictException,
+  UnprocessableEntityException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PrismaService } from './../prisma/prisma.service';
 import { CreateAdDto } from './dto/create-ad.dto';
 import { UpdateAdDto } from './dto/update-ad.dto';
@@ -22,7 +30,7 @@ export class AdService {
     try {
       return await this.prisma.ad.findMany();
     } catch (error) {
-      throw new InternalServerErrorException('Error fetching ads');
+      throw new InternalServerErrorException('Error fetching ads', error);
     }
   }
 
@@ -79,11 +87,11 @@ export class AdService {
         default:
           throw new InternalServerErrorException('Database error');
       }
-    } else if (error.code === '401') {
+    } else if (error === '401') {
       throw new UnauthorizedException('Unauthorized access');
-    } else if (error.code === '403') {
+    } else if (error === '403') {
       throw new ForbiddenException('Access denied');
-    } else if (error.code === '422') {
+    } else if (error === '422') {
       throw new UnprocessableEntityException('Invalid data provided');
     } else {
       throw new InternalServerErrorException('Unexpected error');
