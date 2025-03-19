@@ -84,42 +84,6 @@ const interestData = [
   { name: 'Voluntariado' },
 ];
 
-// Datos de los estados de México
-const statesData = [
-  { name: 'Aguascalientes' },
-  { name: 'Baja California' },
-  { name: 'Baja California Sur' },
-  { name: 'Campeche' },
-  { name: 'Ciudad de México' },
-  { name: 'Chihuahua' },
-  { name: 'Coahuila' },
-  { name: 'Colima' },
-  { name: 'Durango' },
-  { name: 'Estado de México' },
-  { name: 'Guanajuato' },
-  { name: 'Guerrero' },
-  { name: 'Hidalgo' },
-  { name: 'Jalisco' },
-  { name: 'Mexico' },
-  { name: 'Michoacán' },
-  { name: 'Morelos' },
-  { name: 'Nayarit' },
-  { name: 'Nuevo León' },
-  { name: 'Oaxaca' },
-  { name: 'Puebla' },
-  { name: 'Querétaro' },
-  { name: 'Quintana Roo' },
-  { name: 'San Luis Potosí' },
-  { name: 'Sinaloa' },
-  { name: 'Sonora' },
-  { name: 'Tabasco' },
-  { name: 'Tamaulipas' },
-  { name: 'Tlaxcala' },
-  { name: 'Veracruz' },
-  { name: 'Yucatán' },
-  { name: 'Zacatecas' },
-];
-
 const municipalities: Record<string, string[]> = {
     "Aguascalientes": ["Aguascalientes","Asientos","Calvillo","Cosio","El Llano","Jesus Maria","Pabellon de Arteaga","Rincon de Romos","San Francisco de los Romo","San Jose de Gracia","Tepezala"],
     "Baja California": ["Ensenada","Mexicali","Playas de Rosarito","Tecate","Tijuana"],
@@ -154,6 +118,33 @@ const municipalities: Record<string, string[]> = {
     "Yucatan": ["Abala","Acanceh","Akil","Baca","Bokoba","Buctzotz","Cacalchen","Calotmul","Cansahcab","Cantamayec","Celestun","Cenotillo","Chacsinkin","Chankom","Chapab","Chemax","Chichimila","Chicxulub Pueblo","Chikindzonot","Chochola","Chumayel","Conkal","Cuncunul","Cuzama","Dzan","Dzemul","Dzidzantun","Dzilam Gonzalez","Dzilam de Bravo","Dzitas","Dzoncauich","Espita","Halacho","Hocaba","Hoctun","Homun","Huhi","Hunucma","Ixil","Izamal","Kanasin","Kantunil","Kaua","Kinchil","Kopoma","Mama","Mani","Maxcanu","Mayapan","Merida","Mococha","Motul","Muna","Muxupip","Opichen","Oxkutzcab","Panaba","Peto","Progreso","Quintana Roo","Rio Lagartos","Sacalum","Samahil","San Felipe","Sanahcat","Santa Elena","Seye","Sinanche","Sotuta","Sucila","Sudzal","Suma","Tahdziu","Tahmek","Teabo","Tecoh","Tekal de Venegas","Tekanto","Tekax","Tekit","Tekom","Telchac Pueblo","Telchac Puerto","Temax","Temozon","Tepakan","Tetiz","Teya","Ticul","Timucuy","Tinum","Tixcacalcupul","Tixkokob","Tixmehuac","Tixpehual","Tizimin","Tunkas","Tzucacab","Uayma","Ucu","Uman","Valladolid","Xocchel","Yaxcaba","Yaxkukul","Yobain"],
     "Zacatecas": ["Apozol","Apulco","Atolinga","Benito Juarez","Calera","Canitas de Felipe Pescador","Chalchihuites","Concepcion del Oro","Cuauhtemoc","El Plateado de Joaquin Amaro","El Salvador","Fresnillo","Genaro Codina","General Enrique Estrada","General Francisco R. Murguia","General Panfilo Natera","Guadalupe","Huanusco","Jalpa","Jerez","Jimenez del Teul","Juan Aldama","Juchipila","Loreto","Luis Moya","Mazapil","Melchor Ocampo","Mezquital del Oro","Miguel Auza","Momax","Monte Escobedo","Morelos","Moyahua de Estrada","Nochistlan de Mejia","Noria de Angeles","Ojocaliente","Panuco","Pinos","Rio Grande","Sain Alto","Santa Maria de la Paz","Sombrerete","Susticacan","Tabasco","Tepechitlan","Tepetongo","Teul de Gonzalez Ortega","Tlaltenango de Sanchez Roman","Trancoso","Trinidad Garcia de la Cadena","Valparaiso","Vetagrande","Villa Garcia","Villa Gonzalez Ortega","Villa Hidalgo","Villa de Cos","Villanueva","Zacatecas"]
 };
+const amenityData = [
+  { name: 'Aire acondicionado' },
+  { name: 'Calefacción' },
+  { name: 'Piscina' },
+  { name: 'Jacuzzi' },
+  { name: 'Jardín privado' },
+  { name: 'Estacionamiento privado' },
+  { name: 'Estacionamiento para visitas' },
+  { name: 'Terraza' },
+  { name: 'Balcón' },
+  { name: 'Lavadora' },
+  { name: 'Secadora' },
+  { name: 'Gimnasio' },
+  { name: 'Ascensor' },
+  { name: 'Cocina equipada' },
+  { name: 'Internet/Wi-Fi' },
+  { name: 'Televisión por cable' },
+  { name: 'Cable de satélite' },
+  { name: 'Sistema de alarma' },
+  { name: 'Seguridad 24 horas' },
+  { name: 'Sistema de cámaras de seguridad' },
+  { name: 'Acceso para personas con movilidad reducida' },
+  { name: 'Mascotas permitidas' },
+  { name: 'Patio trasero' },
+  { name: 'Sala de lavandería compartida' },
+  { name: 'Área de BBQ' }
+];
 
 // Función para insertar usuarios
 const createUser = async (user) => {
@@ -192,7 +183,6 @@ const createInterest = async (interest) => {
 };
 
 // Función para crear estados y sus municipios
-// Función para crear estados y sus municipios
 const createStateWithMunicipalities = async (stateName: string, municipalities: string[]) => {
   try {
     // Crear el estado y los municipios relacionados
@@ -210,6 +200,18 @@ const createStateWithMunicipalities = async (stateName: string, municipalities: 
     console.log(`Estado y municipios creados: ${newState.name}`);
   } catch (error) {
     console.error(`Error al crear el estado ${stateName}:`, error);
+  }
+};
+
+// Función para crear amenidades
+const createAmenity = async (amenity: { name: string }) => {
+  try {
+    const newAmenity = await prisma.amenity.create({
+      data: amenity,
+    });
+    console.log('Amenidad creada:', newAmenity);
+  } catch (error) {
+    console.error('Error al crear amenidad:', error);
   }
 };
 
@@ -233,6 +235,11 @@ const createData = async () => {
   // Crear los estados y sus municipios
   for (const [stateName, municipalitiesList] of Object.entries(municipalities)) {
     await createStateWithMunicipalities(stateName, municipalitiesList);
+  }
+
+  // Crear amenidades
+  for (const amenity of amenityData) {
+    await createAmenity(amenity);
   }
   
   // Cerrar la conexión con Prisma
