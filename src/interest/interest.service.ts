@@ -47,7 +47,7 @@ export class InterestService {
     }
   }
 
-  async remove(id: number) {
+  async delete(id: number) {
     try {
       const interest = await this.prisma.interest.delete({
         where: { id },

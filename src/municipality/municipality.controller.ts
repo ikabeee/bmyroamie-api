@@ -28,7 +28,7 @@ export class MunicipalityController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  delete(@Param('id') id: string) {
     return this.municipalityService.delete(+id);
   }
 }
