@@ -28,7 +28,7 @@ export class RuleController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  delete(@Param('id') id: string) {
     return this.ruleService.delete(+id);
   }
 }

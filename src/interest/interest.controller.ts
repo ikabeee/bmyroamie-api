@@ -28,7 +28,7 @@ export class InterestController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.interestService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.interestService.delete(+id);
   }
 }

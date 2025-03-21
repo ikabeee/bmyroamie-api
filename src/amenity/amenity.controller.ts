@@ -28,7 +28,7 @@ export class AmenityController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  delete(@Param('id') id: string) {
     return this.amenityService.delete(+id);
   }
 }
