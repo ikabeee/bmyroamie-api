@@ -9,9 +9,10 @@ import { StateModule } from './state/state.module';
 import { MunicipalityModule } from './municipality/municipality.module';
 import { AmenityModule } from './amenity/amenity.module';
 import { RuleModule } from './rule/rule.module';
+import { FavoriteModule } from './favorite/favorite.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }), UserModule, PrismaModule, AdModule, PersonalityModule, InterestModule, StateModule, MunicipalityModule, AmenityModule, RuleModule],
+  imports: [ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }), UserModule, PrismaModule, AdModule, PersonalityModule, InterestModule, StateModule, MunicipalityModule, AmenityModule, RuleModule, FavoriteModule],
   controllers: [],
   providers: [],
 })
