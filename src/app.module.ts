@@ -13,6 +13,7 @@ import { AmenityModule } from './amenity/amenity.module';
 import { AdModule } from './ad/ad.module';
 import { AdAmenityModule } from './ad-amenity/ad-amenity.module';
 import { UserInterestModule } from './user-interest/user-interest.module';
+import { UserPersonalityModule } from './user-personality/user-personality.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UserInterestModule } from './user-interest/user-interest.module';
     AdModule,
     AdAmenityModule,
     UserInterestModule,
+    UserPersonalityModule,
   ],
   controllers: [],
   providers: [],
