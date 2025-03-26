@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PrismaService } from './../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 
@@ -12,7 +16,10 @@ export class PersonalityService {
         data,
       });
     } catch (error) {
-      throw new InternalServerErrorException('Unexpected error occurred while creating the personality');
+      throw new InternalServerErrorException(
+        'Unexpected error occurred while creating the personality',
+        error,
+      );
     }
   }
 
@@ -40,10 +47,16 @@ export class PersonalityService {
       });
       return personality;
     } catch (error) {
-      if (error.code === 'P2025') { 
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
         throw new NotFoundException(`Personality with ID ${id} not found`);
       }
-      throw new InternalServerErrorException('Unexpected error occurred while updating the personality');
+      throw new InternalServerErrorException(
+        'Unexpected error occurred while updating the personality',
+        error,
+      );
     }
   }
 
@@ -54,10 +67,12 @@ export class PersonalityService {
       });
       return personality;
     } catch (error) {
-      if (error.code === 'P2025') {
+      if (error === 'P2025') {
         throw new NotFoundException(`Personality with ID ${id} not found`);
       }
-      throw new InternalServerErrorException('Unexpected error occurred while deleting the personality');
+      throw new InternalServerErrorException(
+        'Unexpected error occurred while deleting the personality',
+      );
     }
   }
 }

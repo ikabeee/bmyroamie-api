@@ -1,18 +1,22 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     try {
-      const user = await this.prisma.user.create({
-        data: createUserDto,
-      });
+      const user = await this.prisma.user.create({ data: createUserDto });
       return user;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -27,8 +31,14 @@ export class UserService {
   async findAll() {
     try {
       return await this.prisma.user.findMany();
-    } catch (error) {
-      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+    } catch (error: unknown) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Internal Server Error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -41,8 +51,14 @@ export class UserService {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       }
       return user;
-    } catch (error) {
-      throw new HttpException('Invalid request', HttpStatus.UNPROCESSABLE_ENTITY);
+    } catch (error: unknown) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Invalid request',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
   }
 
@@ -77,9 +93,5 @@ export class UserService {
       }
       throw new HttpException('Unauthorized access', HttpStatus.UNAUTHORIZED);
     }
-  }
-
-  async forbiddenAction() {
-    throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
   }
 }

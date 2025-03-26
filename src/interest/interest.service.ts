@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PrismaService } from './../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 
@@ -12,7 +16,10 @@ export class InterestService {
         data,
       });
     } catch (error) {
-      throw new InternalServerErrorException('Unexpected error occurred while creating the interest');
+      throw new InternalServerErrorException(
+        'Unexpected error occurred while creating the interest',
+        error,
+      );
     }
   }
 
@@ -40,10 +47,12 @@ export class InterestService {
       });
       return interest;
     } catch (error) {
-      if (error.code === 'P2025') { 
+      if (error === 'P2025') {
         throw new NotFoundException(`Interest with ID ${id} not found`);
       }
-      throw new InternalServerErrorException('Unexpected error occurred while updating the interest');
+      throw new InternalServerErrorException(
+        'Unexpected error occurred while updating the interest',
+      );
     }
   }
 
@@ -54,10 +63,12 @@ export class InterestService {
       });
       return interest;
     } catch (error) {
-      if (error.code === 'P2025') { 
+      if (error === 'P2025') {
         throw new NotFoundException(`Interest with ID ${id} not found`);
       }
-      throw new InternalServerErrorException('Unexpected error occurred while deleting the interest');
+      throw new InternalServerErrorException(
+        'Unexpected error occurred while deleting the interest',
+      );
     }
   }
 }
