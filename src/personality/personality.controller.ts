@@ -39,7 +39,7 @@ export class PersonalityController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.personalityService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.personalityService.delete(+id);
   }
 }

@@ -84,19 +84,20 @@ model Ad {
 }
 
 model State {
-  id   Int    @id @default(autoincrement())
-  name String
+  id              Int               @id @default(autoincrement())
+  name          String
+  municipalities Municipality[] @relation("StateMunicipalities")
 
   Ad           Ad[]
-  Municipality Municipality[]
 }
 
 model Municipality {
-  id      Int    @id @default(autoincrement())
-  name    String
-  stateId Int
-  State   State  @relation(fields: [stateId], references: [id])
+  id              Int       @id @default(autoincrement())
+  name          String
+  stateId    Int
+  state        State   @relation("StateMunicipalities", fields: [stateId], references: [id])
 }
+
 
 model Favorite {
   id     Int  @id @default(autoincrement())

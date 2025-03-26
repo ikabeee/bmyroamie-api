@@ -60,7 +60,7 @@ export class PersonalityService {
     }
   }
 
-  async remove(id: number) {
+  async delete(id: number) {
     try {
       const personality = await this.prisma.personality.delete({
         where: { id },

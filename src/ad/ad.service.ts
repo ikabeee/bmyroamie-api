@@ -62,7 +62,7 @@ export class AdService {
     }
   }
 
-  async remove(id: number) {
+  async delete(id: number) {
     try {
       const ad = await this.prisma.ad.findUnique({ where: { id } });
       if (!ad) throw new NotFoundException(`Ad with ID ${id} not found`);

@@ -28,7 +28,7 @@ export class AdController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.adService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.adService.delete(+id);
   }
 }
