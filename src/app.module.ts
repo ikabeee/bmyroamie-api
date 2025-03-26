@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { AmenityModule } from './amenity/amenity.module';
 import { AdModule } from './ad/ad.module';
 import { AdAmenityModule } from './ad-amenity/ad-amenity.module';
+import { UserInterestModule } from './user-interest/user-interest.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AdAmenityModule } from './ad-amenity/ad-amenity.module';
     AmenityModule,
     AdModule,
     AdAmenityModule,
+    UserInterestModule,
   ],
   controllers: [],
   providers: [],
