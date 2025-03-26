@@ -5,44 +5,40 @@ const prisma = new PrismaClient();
 // Datos de usuarios
 const userData = [
   {
-    name: 'Sebastian',
-    lastName: 'Perez',
+    name: 'Sebastian Perez',
     email: 'sebas@gmail.com',
     password: 'Password.2003',
     telephone: '123-456-7890',
     about_me: 'Just a user who loves coding!',
-    status: 1,
-    role: 1,
+    status: "ACTIVE",
+    role: "ADMIN",
   },
   {
-    name: 'Zuri',
-    lastName: 'Delgado',
+    name: 'Zuri Delgado',
     email: 'zuri@gmail.com',
     password: 'Password.1234',
     telephone: '123-456-7890',
     about_me: 'Just a user who loves coding!',
-    status: 1,
-    role: 1,
+    status: "ACTIVE",
+    role: "ADMIN",
   },
   {
-    name: 'Carlos',
-    lastName: 'Gonzalez',
+    name: 'Carlos Gonzalez',
     email: 'carlos@gmail.com',
     password: 'Password.1234',
     telephone: '123-456-7890',
     about_me: 'Just a user who loves coding!',
-    status: 1,
-    role: 1,
+    status: "ACTIVE",
+    role: "ADMIN",
   },
   {
-    name: 'Bryan',
-    lastName: 'Gamaliel',
+    name: 'Bryan Gamaliel',
     email: 'bryan@gmail.com',
     password: 'Password.1234',
     telephone: '123-456-7890',
     about_me: 'Just a user who loves coding!',
-    status: 1,
-    role: 1,
+    status: "ACTIVE",
+    role: "ADMIN",
   },
 ];
 
@@ -215,36 +211,37 @@ const createAmenity = async (amenity: { name: string }) => {
   }
 };
 
-// Función principal para insertar todos los datos
 const createData = async () => {
-  // Crear usuarios
-  for (const user of userData) {
-    await createUser(user);
-  }
+  const transaction = await prisma.$transaction(async (prisma) => {
+    // Create users
+    for (const user of userData) {
+      await createUser(user);
+    }
 
-  // Crear personalidades
-  for (const personality of personalityData) {
-    await createPersonality(personality);
-  }
+    // Create personalities
+    for (const personality of personalityData) {
+      await createPersonality(personality);
+    }
 
-  // Crear intereses
-  for (const interest of interestData) {
-    await createInterest(interest);
-  }
+    // Create interests
+    for (const interest of interestData) {
+      await createInterest(interest);
+    }
 
-  // Crear los estados y sus municipios
-  for (const [stateName, municipalitiesList] of Object.entries(municipalities)) {
-    await createStateWithMunicipalities(stateName, municipalitiesList);
-  }
+    // Create the states and municipalities
+    for (const [stateName, municipalitiesList] of Object.entries(municipalities)) {
+      await createStateWithMunicipalities(stateName, municipalitiesList);
+    }
 
-  // Crear amenidades
-  for (const amenity of amenityData) {
-    await createAmenity(amenity);
-  }
+    // Create amenities
+    for (const amenity of amenityData) {
+      await createAmenity(amenity);
+    }
+  });
   
-  // Cerrar la conexión con Prisma
-  await prisma.$disconnect();
+  console.log('All data created successfully!');
 };
+
 
 // Ejecutar el script
 createData();
