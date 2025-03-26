@@ -1,36 +1,48 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
-  Req,
-  Request,
   Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
-import { RegisterAuthDto } from './dto/register-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
+import { RegisterAuthDto } from './dto/register-auth.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('/profile')
-  getProfile(@Request() req) {
-    return req.user;
-  }
-
   @Post('/register')
-  register(@Body() user: RegisterAuthDto) {
-    return this.authService.reguster(user);
+  @HttpCode(HttpStatus.CREATED)
+  async register(
+    @Body() user: RegisterAuthDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const { token, payload } = await this.authService.register(user);
+    response.cookie('jwt', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
+    return { message: 'User registered successfully', user: payload };
   }
 
   @Post('/login')
-  login(@Body() user: LoginAuthDto) {
-    return this.authService.login(user);
+  @HttpCode(HttpStatus.OK)
+  async login(
+    @Body() user: LoginAuthDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const { token, payload } = await this.authService.login(user);
+    response.cookie('jwt', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
+    return { message: 'Login successful', user: payload };
   }
 
   @Post('/logout')
@@ -39,7 +51,8 @@ export class AuthController {
     response.clearCookie('jwt', {
       httpOnly: true,
       secure: true,
-      sameSite: true,
+      sameSite: 'strict',
     });
+    return { message: 'Logout successful' };
   }
 }

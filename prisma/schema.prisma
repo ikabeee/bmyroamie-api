@@ -20,8 +20,8 @@ model User {
   password  String
   telephone String
   about_me  String
-  status    Int
-  role      Int
+  status    Status
+  role      Role
 
   UserPersonality UserPersonality[]
   UserInterest    UserInterest[]
@@ -69,7 +69,7 @@ model Ad {
   num_bathrooms Int
   lat           Float
   lon           Float
-  status        Int
+  status        Status
   created_at    DateTime @default(now())
   userId        Int
   stateId       Int
@@ -133,4 +133,17 @@ model Image {
   url  String
   adId Int
   Ad   Ad     @relation(fields: [adId], references: [id])
+}
+
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DELETED
+  BANNED
+}
+
+enum Role {
+  ADMIN
+  USER
 }

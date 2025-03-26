@@ -10,7 +10,4 @@ export class RegisterAuthDto {
   @IsString()
   @IsNotEmpty()
   password: string;
-  @IsNotEmpty()
-  @IsString()
-  repeatPassword: string;
 }
