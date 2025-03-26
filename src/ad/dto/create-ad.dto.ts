@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Status } from '@prisma/client';
+import { IsNotEmpty, IsNumber, IsString, IsEnum } from 'class-validator';
 
 export class CreateAdDto {
   @IsNotEmpty()
@@ -34,8 +35,8 @@ export class CreateAdDto {
   lon: number;
 
   @IsNotEmpty()
-  @IsNumber()
-  status: number;
+  @IsEnum(Status)
+  status: Status;
 
   @IsNotEmpty()
   @IsNumber()

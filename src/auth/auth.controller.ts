@@ -5,17 +5,19 @@ import {
   HttpStatus,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RegisterAuthDto } from './dto/register-auth.dto';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/register')
+  @Post('register')
   @HttpCode(HttpStatus.CREATED)
   async register(
     @Body() user: RegisterAuthDto,
@@ -30,7 +32,7 @@ export class AuthController {
     return { message: 'User registered successfully', user: payload };
   }
 
-  @Post('/login')
+  @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(
     @Body() user: LoginAuthDto,
@@ -45,8 +47,9 @@ export class AuthController {
     return { message: 'Login successful', user: payload };
   }
 
-  @Post('/logout')
+  @Post('logout')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('jwt', {
       httpOnly: true,
