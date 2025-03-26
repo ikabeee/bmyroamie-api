@@ -11,6 +11,7 @@ import { FavoriteModule } from './favorite/favorite.module';
 import { AuthModule } from './auth/auth.module';
 import { AmenityModule } from './amenity/amenity.module';
 import { AdModule } from './ad/ad.module';
+import { AdAmenityModule } from './ad-amenity/ad-amenity.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AdModule } from './ad/ad.module';
     AuthModule,
     AmenityModule,
     AdModule,
+    AdAmenityModule,
   ],
   controllers: [],
   providers: [],

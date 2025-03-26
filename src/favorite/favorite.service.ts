@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
@@ -15,7 +16,10 @@ export class FavoriteService {
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new HttpException('Favorite already exists', HttpStatus.CONFLICT);
+          throw new HttpException(
+            'Favorite already exists',
+            HttpStatus.CONFLICT,
+          );
         }
       }
       throw new HttpException('Invalid data', HttpStatus.BAD_REQUEST);
@@ -28,7 +32,10 @@ export class FavoriteService {
         include: { User: true, Ad: true },
       });
     } catch (error) {
-      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Internal Server Error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -39,7 +46,10 @@ export class FavoriteService {
         include: { Ad: true },
       });
     } catch (error) {
-      throw new HttpException('Invalid request', HttpStatus.UNPROCESSABLE_ENTITY);
+      throw new HttpException(
+        'Invalid request',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
   }
 
@@ -50,7 +60,10 @@ export class FavoriteService {
         include: { User: true },
       });
     } catch (error) {
-      throw new HttpException('Invalid request', HttpStatus.UNPROCESSABLE_ENTITY);
+      throw new HttpException(
+        'Invalid request',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
   }
 
