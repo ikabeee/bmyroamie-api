@@ -292,16 +292,48 @@ const ruleData = [
 
 // Datos de imágenes
 const imageData = [
-  { url: "https://example.com/images/room1.jpg" },
-  { url: "https://example.com/images/room2.jpg" },
-  { url: "https://example.com/images/room3.jpg" },
-  { url: "https://example.com/images/room4.jpg" },
-  { url: "https://example.com/images/room5.jpg" },
-  { url: "https://example.com/images/room6.jpg" },
-  { url: "https://example.com/images/room7.jpg" },
-  { url: "https://example.com/images/room8.jpg" },
-  { url: "https://example.com/images/room9.jpg" },
-  { url: "https://example.com/images/room10.jpg" }
+  // Original 10 images
+  { url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267" }, // Modern living room
+  { url: "https://images.unsplash.com/photo-1502672260266-1c8ef2f93355" }, // Kitchen
+  { url: "https://images.unsplash.com/photo-1502005097973-6a7082348e28" }, // Bedroom
+  { url: "https://images.unsplash.com/photo-1513694203232-719a280e022f" }, // Bathroom
+  { url: "https://images.unsplash.com/photo-1484154218962-a197022b5858" }, // Dining room
+  { url: "https://images.unsplash.com/photo-1484101403633-562f891dc89a" }, // Balcony
+  { url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750" }, // House exterior
+  { url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750" }, // Garden
+  { url: "https://images.unsplash.com/photo-1502672260266-1c8ef2f93355" }, // Kitchen
+  { url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267" }, // Living room
+
+  // 30 new images
+  { url: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6" }, // Modern apartment
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Cozy bedroom
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Living space
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Kitchen interior
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Bathroom design
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Outdoor space
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Study room
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Balcony view
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Modern kitchen
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Living area
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Bedroom design
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Bathroom interior
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Dining area
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Garden view
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // House front
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Terrace
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Kitchen space
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Living room
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Bedroom
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Bathroom
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Dining room
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Garden
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // House
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Balcony
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Kitchen
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Living
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Bed
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }, // Bath
+  { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" }  // Dine
 ];
 
 // Función para insertar usuarios
@@ -476,6 +508,17 @@ const createAdAmenity = async (adId, amenityId) => {
   }
 };
 
+// Función para obtener índices aleatorios únicos
+const getRandomIndices = (total: number, count: number): number[] => {
+  const indices: number[] = Array.from({length: total}, (_, i) => i);
+  const result: number[] = [];
+  for (let i = 0; i < count; i++) {
+    const randomIndex = Math.floor(Math.random() * indices.length);
+    result.push(indices.splice(randomIndex, 1)[0]);
+  }
+  return result;
+};
+
 // Función principal para insertar todos los datos
 const createData = async () => {
   try {
@@ -513,14 +556,16 @@ const createData = async () => {
           await createRule(ruleData[i], newAd.id);
         }
 
-        // Crear imágenes para cada anuncio
-        for (let i = 0; i < 3; i++) {
-          await createImage(imageData[i], newAd.id);
+        // Crear imágenes para cada anuncio (3 random images)
+        const randomImageIndices = getRandomIndices(imageData.length, 3);
+        for (const imageIndex of randomImageIndices) {
+          await createImage(imageData[imageIndex], newAd.id);
         }
 
-        // Crear relaciones con amenidades
-        for (let i = 0; i < 5; i++) {
-          await createAdAmenity(newAd.id, i + 1);
+        // Crear relaciones con amenidades (5 random amenities)
+        const randomAmenityIndices = getRandomIndices(amenityData.length, 5);
+        for (const amenityIndex of randomAmenityIndices) {
+          await createAdAmenity(newAd.id, amenityIndex + 1);
         }
       }
     }
