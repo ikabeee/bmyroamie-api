@@ -26,23 +26,34 @@ export class AmenityService {
 
   async findAll() {
     try {
-      return await this.prisma.amenity.findMany();
+      return await this.prisma.amenity.findMany({
+        include: {
+          AdAmenity: {
+            include: {
+              Ad: true
+            }
+          }
+        }
+      });
     } catch (error) {
-      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+      this.handlePrismaError(error);
     }
   }
 
   async findOne(id: number) {
     try {
-      const amenity = await this.prisma.amenity.findUnique({
+      return await this.prisma.amenity.findUnique({
         where: { id },
+        include: {
+          AdAmenity: {
+            include: {
+              Ad: true
+            }
+          }
+        }
       });
-      if (!amenity) {
-        throw new HttpException('Amenity not found', HttpStatus.NOT_FOUND);
-      }
-      return amenity;
     } catch (error) {
-      throw new HttpException('Invalid request', HttpStatus.UNPROCESSABLE_ENTITY);
+      this.handlePrismaError(error);
     }
   }
 
@@ -81,5 +92,14 @@ export class AmenityService {
 
   async forbiddenAction() {
     throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
+  }
+
+  private handlePrismaError(error: any) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        throw new HttpException('Amenity already exists', HttpStatus.CONFLICT);
+      }
+    }
+    throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

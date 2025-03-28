@@ -24,19 +24,36 @@ export class InterestService {
   }
 
   async findAll() {
-    return await this.prisma.interest.findMany();
+    try {
+      return await this.prisma.interest.findMany({
+        include: {
+          UserInterest: {
+            include: {
+              User: true
+            }
+          }
+        }
+      });
+    } catch (error) {
+      this.handlePrismaError(error);
+    }
   }
 
   async findOne(id: number) {
-    const interest = await this.prisma.interest.findUnique({
-      where: { id },
-    });
-
-    if (!interest) {
-      throw new NotFoundException(`Interest with ID ${id} not found`);
+    try {
+      return await this.prisma.interest.findUnique({
+        where: { id },
+        include: {
+          UserInterest: {
+            include: {
+              User: true
+            }
+          }
+        }
+      });
+    } catch (error) {
+      this.handlePrismaError(error);
     }
-
-    return interest;
   }
 
   async update(id: number, data: Prisma.InterestUpdateInput) {
@@ -70,5 +87,15 @@ export class InterestService {
         'Unexpected error occurred while deleting the interest',
       );
     }
+  }
+
+  private handlePrismaError(error: any) {
+    if (error instanceof NotFoundException) {
+      throw error;
+    }
+    throw new InternalServerErrorException(
+      'Unexpected error occurred while querying the interest',
+      error,
+    );
   }
 }

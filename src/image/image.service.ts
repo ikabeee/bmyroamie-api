@@ -21,7 +21,11 @@ export class ImageService {
 
   async findAll() {
     try {
-      return await this.prisma.image.findMany();
+      return await this.prisma.image.findMany({
+        include: {
+          Ad: true
+        }
+      });
     } catch (error) {
       throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -29,11 +33,12 @@ export class ImageService {
 
   async findOne(id: number) {
     try {
-      const image = await this.prisma.image.findUnique({ where: { id } });
-      if (!image) {
-        throw new HttpException('Image not found', HttpStatus.NOT_FOUND);
-      }
-      return image;
+      return await this.prisma.image.findUnique({
+        where: { id },
+        include: {
+          Ad: true
+        }
+      });
     } catch (error) {
       throw new HttpException('Invalid request', HttpStatus.UNPROCESSABLE_ENTITY);
     }

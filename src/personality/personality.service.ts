@@ -24,19 +24,36 @@ export class PersonalityService {
   }
 
   async findAll() {
-    return await this.prisma.personality.findMany();
+    try {
+      return await this.prisma.personality.findMany({
+        include: {
+          UserPersonality: {
+            include: {
+              User: true
+            }
+          }
+        }
+      });
+    } catch (error) {
+      this.handlePrismaError(error);
+    }
   }
 
   async findOne(id: number) {
-    const personality = await this.prisma.personality.findUnique({
-      where: { id },
-    });
-
-    if (!personality) {
-      throw new NotFoundException(`Personality with ID ${id} not found`);
+    try {
+      return await this.prisma.personality.findUnique({
+        where: { id },
+        include: {
+          UserPersonality: {
+            include: {
+              User: true
+            }
+          }
+        }
+      });
+    } catch (error) {
+      this.handlePrismaError(error);
     }
-
-    return personality;
   }
 
   async update(id: number, data: Prisma.PersonalityUpdateInput) {
@@ -74,5 +91,18 @@ export class PersonalityService {
         'Unexpected error occurred while deleting the personality',
       );
     }
+  }
+
+  private handlePrismaError(error: any) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2025'
+    ) {
+      throw new NotFoundException(`Personality not found`);
+    }
+    throw new InternalServerErrorException(
+      'Unexpected error occurred while fetching the personality',
+      error,
+    );
   }
 }

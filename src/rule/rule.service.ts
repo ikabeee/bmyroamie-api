@@ -28,24 +28,27 @@ export class RuleService {
   // Obtener todas las reglas
   async findAll() {
     try {
-      return await this.prisma.rule.findMany();
+      return await this.prisma.rule.findMany({
+        include: {
+          Ad: true
+        }
+      });
     } catch (error) {
-      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+      this.handlePrismaError(error);
     }
   }
 
   // Obtener una regla por ID
   async findOne(id: number) {
     try {
-      const rule = await this.prisma.rule.findUnique({
+      return await this.prisma.rule.findUnique({
         where: { id },
+        include: {
+          Ad: true
+        }
       });
-      if (!rule) {
-        throw new HttpException('Rule not found', HttpStatus.NOT_FOUND);
-      }
-      return rule;
     } catch (error) {
-      throw new HttpException('Invalid request', HttpStatus.UNPROCESSABLE_ENTITY);
+      this.handlePrismaError(error);
     }
   }
 
@@ -87,5 +90,14 @@ export class RuleService {
   // Acción prohibida (un ejemplo de error)
   async forbiddenAction() {
     throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
+  }
+
+  private handlePrismaError(error: any) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        throw new HttpException('Rule already exists', HttpStatus.CONFLICT);
+      }
+    }
+    throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

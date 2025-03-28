@@ -26,23 +26,50 @@ export class StateService {
 
   async findAll() {
     try {
-      return await this.prisma.state.findMany();
+      return await this.prisma.state.findMany({
+        include: {
+          municipalities: true,
+          Ad: {
+            include: {
+              User: true,
+              Image: true,
+              Rule: true,
+              AdAmenity: {
+                include: {
+                  Amenity: true
+                }
+              }
+            }
+          }
+        }
+      });
     } catch (error) {
-      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+      this.handlePrismaError(error);
     }
   }
 
   async findOne(id: number) {
     try {
-      const state = await this.prisma.state.findUnique({
+      return await this.prisma.state.findUnique({
         where: { id },
+        include: {
+          municipalities: true,
+          Ad: {
+            include: {
+              User: true,
+              Image: true,
+              Rule: true,
+              AdAmenity: {
+                include: {
+                  Amenity: true
+                }
+              }
+            }
+          }
+        }
       });
-      if (!state) {
-        throw new HttpException('State not found', HttpStatus.NOT_FOUND);
-      }
-      return state;
     } catch (error) {
-      throw new HttpException('Invalid request', HttpStatus.UNPROCESSABLE_ENTITY);
+      this.handlePrismaError(error);
     }
   }
 
@@ -81,5 +108,14 @@ export class StateService {
 
   async forbiddenAction() {
     throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
+  }
+
+  private handlePrismaError(error: any) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        throw new HttpException('State already exists', HttpStatus.CONFLICT);
+      }
+    }
+    throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

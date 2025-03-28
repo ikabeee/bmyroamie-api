@@ -28,21 +28,50 @@ export class AdService {
 
   async findAll() {
     try {
-      return await this.prisma.ad.findMany();
+      return await this.prisma.ad.findMany({
+        include: {
+          User: true,
+          State: {
+            include: {
+              municipalities: true
+            }
+          },
+          Favorite: true,
+          AdAmenity: {
+            include: {
+              Amenity: true
+            }
+          },
+          Image: true,
+          Rule: true
+        }
+      });
     } catch (error) {
-      throw new InternalServerErrorException('Error fetching ads', error);
+      this.handlePrismaError(error);
     }
   }
 
   async findOne(id: number) {
     try {
-      const ad = await this.prisma.ad.findUnique({
+      return await this.prisma.ad.findUnique({
         where: { id },
+        include: {
+          User: true,
+          State: {
+            include: {
+              municipalities: true
+            }
+          },
+          Favorite: true,
+          AdAmenity: {
+            include: {
+              Amenity: true
+            }
+          },
+          Image: true,
+          Rule: true
+        }
       });
-
-      if (!ad) throw new NotFoundException(`Ad with ID ${id} not found`);
-
-      return ad;
     } catch (error) {
       this.handlePrismaError(error);
     }

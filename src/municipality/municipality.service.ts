@@ -26,23 +26,26 @@ export class MunicipalityService {
 
   async findAll() {
     try {
-      return await this.prisma.municipality.findMany();
+      return await this.prisma.municipality.findMany({
+        include: {
+          state: true
+        }
+      });
     } catch (error) {
-      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+      this.handlePrismaError(error);
     }
   }
 
   async findOne(id: number) {
     try {
-      const municipality = await this.prisma.municipality.findUnique({
+      return await this.prisma.municipality.findUnique({
         where: { id },
+        include: {
+          state: true
+        }
       });
-      if (!municipality) {
-        throw new HttpException('Municipality not found', HttpStatus.NOT_FOUND);
-      }
-      return municipality;
     } catch (error) {
-      throw new HttpException('Invalid request', HttpStatus.UNPROCESSABLE_ENTITY);
+      this.handlePrismaError(error);
     }
   }
 
@@ -81,5 +84,14 @@ export class MunicipalityService {
 
   async forbiddenAction() {
     throw new HttpException('Access denied', HttpStatus.FORBIDDEN);
+  }
+
+  private handlePrismaError(error: any) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        throw new HttpException('Municipality already exists', HttpStatus.CONFLICT);
+      }
+    }
+    throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

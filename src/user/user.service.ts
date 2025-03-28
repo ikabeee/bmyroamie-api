@@ -30,35 +30,56 @@ export class UserService {
 
   async findAll() {
     try {
-      return await this.prisma.user.findMany();
-    } catch (error: unknown) {
-      if (error instanceof BadRequestException) {
-        throw error;
-      }
-      throw new HttpException(
-        'Internal Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      return await this.prisma.user.findMany({
+        include: {
+          UserPersonality: {
+            include: {
+              Personality: true
+            }
+          },
+          UserInterest: {
+            include: {
+              Interest: true
+            }
+          },
+          Ad: true,
+          Favorite: {
+            include: {
+              Ad: true
+            }
+          }
+        }
+      });
+    } catch (error) {
+      this.handlePrismaError(error);
     }
   }
 
   async findOne(id: number) {
     try {
-      const user = await this.prisma.user.findUnique({
+      return await this.prisma.user.findUnique({
         where: { id },
+        include: {
+          UserPersonality: {
+            include: {
+              Personality: true
+            }
+          },
+          UserInterest: {
+            include: {
+              Interest: true
+            }
+          },
+          Ad: true,
+          Favorite: {
+            include: {
+              Ad: true
+            }
+          }
+        }
       });
-      if (!user) {
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-      }
-      return user;
-    } catch (error: unknown) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new HttpException(
-        'Invalid request',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+    } catch (error) {
+      this.handlePrismaError(error);
     }
   }
 
@@ -93,5 +114,15 @@ export class UserService {
       }
       throw new HttpException('Unauthorized access', HttpStatus.UNAUTHORIZED);
     }
+  }
+
+  private handlePrismaError(error: unknown) {
+    if (error instanceof BadRequestException) {
+      throw error;
+    }
+    throw new HttpException(
+      'Internal Server Error',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
 }
